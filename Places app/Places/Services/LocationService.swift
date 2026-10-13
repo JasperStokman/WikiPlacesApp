@@ -25,15 +25,12 @@ struct LocationsAPIService: LocationService {
         }
         
         
-        
         do {
             let locationData = try decoder.decode(LocationsResponse.self, from: data)
             return locationData.locations
         }
     }
-    
 }
-
 
 
 enum LocationsServiceError: Error, Equatable, LocalizedError {

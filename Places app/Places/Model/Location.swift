@@ -9,6 +9,13 @@ struct Location: Identifiable, Equatable, Sendable {
     let name: String?
     let latitude: Double
     let longitude: Double
+    
+    var displayedName: String {
+        if let name, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return name
+        }
+        return ""
+    }
 
     init(id: UUID = UUID(), name: String?, latitude: Double, longitude: Double) {
         self.id = id
