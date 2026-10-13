@@ -22,7 +22,6 @@ final class LocationsViewModel: ObservableObject {
     }
     
     func loadLocations() {
-    
         loadTask = Task {
             do {
                 let fetched = try await locationsService.fetchLocations()
@@ -33,6 +32,10 @@ final class LocationsViewModel: ObservableObject {
                 loadState = .failed(message)
             }
         }
+    }
+    
+    func addLocation(_ location: Location) {
+        locations.append(location)
     }
 }
 
