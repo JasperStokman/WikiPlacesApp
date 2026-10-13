@@ -5,7 +5,9 @@ import SwiftUI
         WindowGroup {
             LocationsListView(
                 viewModel: LocationsViewModel(
-                    locationsService: LocationsAPIService())
+                    locationsService: LocationsAPIService(),
+                    wikiRouting: WikipediaURLOpener()
+                )
             )
         }
     }

@@ -1,7 +1,7 @@
 import Foundation
 
 enum Localized {
-    static let optionalName = "Name (optional)"
+    static let optionalName = "Name"
     static let latitude = "Latitude"
     static let longitude = "Longitude"
     static let customLocation = "Custom location"

@@ -17,15 +17,26 @@ struct LocationsListView: View {
                 Section {
                     ForEach(viewModel.locations) { location in
                         Button {
-                            // viewModel.open(location)
+                            viewModel.open(location)
                         } label: {
                             LocationRowView(location: location)
                         }
                     }
                 } footer: {
-                    Text(
-                        Localized.tapLocation
-                    )
+                    if let error = viewModel.onOpenError {
+                        Text(
+                            error
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                        .padding(.vertical, 6)
+                    } else {
+                        Text(
+                            Localized.tapLocation
+                        )
+                    }
                 }
             }
             .refreshable {
@@ -64,7 +75,6 @@ struct LocationsListView: View {
 
 private struct LocationRowView: View {
     let location: Location
-
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(location.displayedName)

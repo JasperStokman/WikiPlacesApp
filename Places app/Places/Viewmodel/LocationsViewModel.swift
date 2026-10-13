@@ -13,19 +13,33 @@ final class LocationsViewModel: ObservableObject {
     
     @Published private(set) var locations: [Location] = []
     @Published private(set) var loadState: LoadState = .idle
+    @Published private(set) var onOpenError: String?
     
     private let locationsService: LocationService
+    private let wikiRouting: WikipediaURLOpener
+    
     private var loadTask: Task<Void, Never>?
     
-    init(locationsService: LocationService) {
+    init(locationsService: LocationService, wikiRouting: WikipediaURLOpener) {
         self.locationsService = locationsService
+        self.wikiRouting = wikiRouting
     }
     
     func loadLocations() {
         loadTask = Task {
             do {
-                let fetched = try await locationsService.fetchLocations()
-                locations = fetched
+                let fetchedLocations = try await locationsService.fetchLocations()
+                
+                // Make sure only locations with name are visible
+                locations = fetchedLocations.filter { location in
+                    guard let name = location.name else {
+                        return false
+                    }
+                    
+                    return !name.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    ).isEmpty
+                }
                 loadState = .loaded
             } catch {
                 let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
@@ -39,4 +53,18 @@ final class LocationsViewModel: ObservableObject {
     }
 }
 
-
+extension LocationsViewModel {
+    
+    func open(_ location: Location) {
+        Task {
+            let didOpen = await wikiRouting.openLocation(
+                latitude: location.latitude,
+                longitude: location.longitude
+            )
+            
+            if !didOpen {
+                onOpenError = "Could not open Wikipedia. Please install the modified wikipedia app"
+            }
+        }
+    }
+}
