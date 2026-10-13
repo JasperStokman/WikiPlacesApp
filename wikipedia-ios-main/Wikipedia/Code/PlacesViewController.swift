@@ -2088,6 +2088,18 @@ class PlacesViewController: ArticleLocationCollectionViewController, UISearchBar
         recenterOnUserLocation(self)
     }
 
+    @objc public func showLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        guard view != nil else {
+            return
+        }
+        
+        // Make sure the gps updates doesn't pan the map to the current location
+        panMapToNextLocationUpdate = false
+        updateViewModeToMap()
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        zoomAndPanMapView(toLocation: location)
+    }
+
     @objc public func showArticleURL(_ articleURL: URL) {
         guard let article = dataStore.fetchArticle(with: articleURL), let title = articleURL.wmf_title,
               view != nil else { // force view instantiation

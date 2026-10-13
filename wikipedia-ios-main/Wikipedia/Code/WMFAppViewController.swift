@@ -1286,6 +1286,9 @@ final class WMFAppViewController: UITabBarController, AppTabBarDelegate {
             if let articleURL = activity.wmf_linkURL() {
                 placesViewController.updateViewModeToMap()
                 placesViewController.showArticleURL(articleURL)
+            } else if let latitude = getCoordinateValue(from: activity.userInfo, key: "lat"),
+                      let longitude = getCoordinateValue(from: activity.userInfo, key: "long") {
+                placesViewController.showLocation(latitude: latitude, longitude: longitude)
             }
 
         case .random:
@@ -1405,6 +1408,22 @@ final class WMFAppViewController: UITabBarController, AppTabBarDelegate {
         guard !shouldOpenAppOnSearchTab() else { return false }
         guard let resignActiveDate = UserDefaults.standard.wmf_appResignActiveDate() else { return false }
         return abs(resignActiveDate.timeIntervalSinceNow) >= wmfTimeBeforeShowingHomeScreenOnLaunch
+    }
+
+    // Get coordinate value from userInfo dictionary
+    
+    private func getCoordinateValue(from userInfo: [AnyHashable: Any]?, key: String) -> Double? {
+        guard let value = userInfo?[key] else { return nil }
+        if let number = value as? NSNumber {
+            return number.doubleValue
+        }
+        if let double = value as? Double {
+            return double
+        }
+        if let string = value as? String {
+            return Double(string)
+        }
+        return nil
     }
 
     func visibleArticleViewController() -> ArticleViewController? {
