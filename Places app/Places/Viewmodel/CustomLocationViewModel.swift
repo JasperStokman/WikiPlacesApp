@@ -17,12 +17,12 @@ final class CustomLocationViewModel: ObservableObject {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let latitude = Double(latitude.trimmingCharacters(in: .whitespacesAndNewlines)),
               let longitude = Double(longitude.trimmingCharacters(in: .whitespacesAndNewlines)) else {
-            locationError = "Enter valid latitude and longitude values."
+            locationError = Localized.wrongInputErrorMessage
             return
         }
 
         guard (-90...90).contains(latitude), (-180...180).contains(longitude) else {
-            locationError = "Latitude must be between -90 and 90, longitude between -180 and 180."
+            locationError = Localized.rangeError
             return
         }
 

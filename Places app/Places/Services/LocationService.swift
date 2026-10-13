@@ -1,5 +1,24 @@
 import Foundation
 
+enum LocationsServiceError: Error, Equatable, LocalizedError {
+    case invalidURL
+    case invalidResponse
+    case decodingFailed
+    case network(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return Localized.invalidURL
+        case .invalidResponse:
+            return Localized.invalidResponse
+        case .decodingFailed:
+            return Localized.decodingFailed
+        case .network(let message):
+            return message
+        }
+    }
+}
 
 protocol LocationService {
     func fetchLocations() async throws -> [Location]
@@ -24,31 +43,9 @@ struct LocationsAPIService: LocationService {
             throw LocationsServiceError.network(error.localizedDescription)
         }
         
-        
         do {
             let locationData = try decoder.decode(LocationsResponse.self, from: data)
             return locationData.locations
-        }
-    }
-}
-
-
-enum LocationsServiceError: Error, Equatable, LocalizedError {
-    case invalidURL
-    case invalidResponse
-    case decodingFailed
-    case network(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL:
-            return "The locations URL is invalid."
-        case .invalidResponse:
-            return "The server returned an unexpected response."
-        case .decodingFailed:
-            return "Could not parse the locations list."
-        case .network(let message):
-            return message
         }
     }
 }

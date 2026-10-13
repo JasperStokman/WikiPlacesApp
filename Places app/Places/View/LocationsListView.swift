@@ -3,6 +3,8 @@ import SwiftUI
 
 struct LocationsListView: View {
     @StateObject private var viewModel: LocationsViewModel
+    @StateObject private var customLocationViewModel =
+         CustomLocationViewModel()
     @State private var showingCustomLocation = false
 
     init(viewModel: LocationsViewModel) {
@@ -22,14 +24,14 @@ struct LocationsListView: View {
                     }
                 } footer: {
                     Text(
-                        "Tap a location to open it in the Wikipedia Places map."
+                        Localized.tapLocation
                     )
                 }
             }
             .refreshable {
                 viewModel.loadLocations()
             }
-            .navigationTitle("Places")
+            .navigationTitle(Localized.places)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -47,21 +49,16 @@ struct LocationsListView: View {
         .sheet(isPresented: $showingCustomLocation) {
             NavigationStack {
                 CustomLocationView(
-                    viewModel: makeCustomLocationViewModel()
+                    viewModel: CustomLocationViewModel()
                 )
             }
         }
-    }
-
-    private func makeCustomLocationViewModel() -> CustomLocationViewModel {
-        let customViewModel = CustomLocationViewModel()
-
-        customViewModel.onAdd = { location in
-            viewModel.addLocation(location)
-            showingCustomLocation = false
+        .onAppear {
+            customLocationViewModel.onAdd = { location in
+                viewModel.addLocation(location)
+                showingCustomLocation = false
+            }
         }
-
-        return customViewModel
     }
 }
 

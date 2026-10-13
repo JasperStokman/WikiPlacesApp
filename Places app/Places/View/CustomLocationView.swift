@@ -7,12 +7,12 @@ struct CustomLocationView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Name (optional)", text: $viewModel.name)
-                TextField("Latitude", text: $viewModel.latitude)
+                TextField(Localized.optionalName, text: $viewModel.name)
+                TextField(Localized.latitude, text: $viewModel.latitude)
                     .keyboardType(.numbersAndPunctuation)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                TextField("Longitude", text: $viewModel.longitude)
+                TextField(Localized.longitude, text: $viewModel.longitude)
                     .keyboardType(.numbersAndPunctuation)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -25,17 +25,17 @@ struct CustomLocationView: View {
                 }
             }
         }
-        .navigationTitle("Custom location")
+        .navigationTitle(Localized.customLocation)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button(Localized.cancel) {
                     dismiss()
                 }
             }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button("Add") {
+                Button(Localized.add) {
                     viewModel.addCustomLocation()
                     dismiss()
                 }
