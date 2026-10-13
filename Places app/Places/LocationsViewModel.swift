@@ -6,8 +6,11 @@ final class LocationsViewModel: ObservableObject {
     
     @Published private(set) var locations: [Location] = []
     
-    init(locations: [Location]) {
-        self.locations = locations
+    private let locationsService: LocationService
+
+    
+    init(locationsService: LocationService) {
+        self.locationsService = locationsService
     }
     
 }
