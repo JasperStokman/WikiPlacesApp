@@ -403,14 +403,9 @@ final class WMFAppViewController: UITabBarController, AppTabBarDelegate {
         applyRootTabAccessibilityIdentifiers()
 
         updateUserInterfaceStyleOfNavigationControllersForCurrentTheme()
-
-        let shouldOpenOnSearch = shouldOpenAppOnSearchTab()
-        if shouldOpenOnSearch && selectedIndex != WMFAppTabType.search.rawValue {
-            selectedIndex = WMFAppTabType.search.rawValue
-            searchTabViewController.makeSearchBarBecomeFirstResponder()
-        } else if selectedIndex != WMFAppTabType.main.rawValue {
-            selectedIndex = WMFAppTabType.main.rawValue
-        }
+        
+        // Always open on places tab
+        selectedIndex = WMFAppTabType.places.rawValue
     }
 
     private func rootNavigationController(with rootViewController: UIViewController) -> WMFComponentNavigationController {
@@ -982,7 +977,8 @@ final class WMFAppViewController: UITabBarController, AppTabBarDelegate {
                 _ = self.dataStore.authenticationManager.authStateIsTemporary
             } else if self.shouldShowHomeOnLaunch() {
                 self.hideSplashView()
-                self.showHome()
+                self.selectedIndex = WMFAppTabType.places.rawValue
+                self.currentTabNavigationController?.popToRootViewController(animated: false)
                 done()
             } else {
                 self.hideSplashView()
