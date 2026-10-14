@@ -21,21 +21,25 @@ struct LocationsListView: View {
                         } label: {
                             LocationRowView(location: location)
                         }
+                        .accessibilityLabel(
+                            Localized.accessibilityLocationLabel(
+                                name: location.displayedName,
+                                latitude: location.latitude,
+                                longitude: location.longitude
+                            )
+                        )
+                        .accessibilityHint(Localized.accessibilityOpenInWikipediaHint)
                     }
                 } footer: {
                     if let error = viewModel.onOpenError {
-                        Text(
-                            error
-                        )
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                        .padding(.vertical, 6)
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                            .padding(.vertical, 6)
                     } else {
-                        Text(
-                            Localized.tapLocation
-                        )
+                        Text(Localized.tapLocation)
                     }
                 }
             }
@@ -50,12 +54,22 @@ struct LocationsListView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
-                    .accessibilityLabel("Add custom location")
+                    .accessibilityLabel(Localized.accessibilityAddCustomLocation)
+                }
+            }
+            .overlay {
+                if viewModel.loadState == .loading {
+                    ProgressView()
+                        .accessibilityLabel(Localized.accessibilityLoadingPlaces)
                 }
             }
         }
         .task {
             viewModel.loadLocations()
+        }
+        .onChange(of: viewModel.onOpenError) { _, error in
+            guard let error else { return }
+            AccessibilityNotification.Announcement(error).post()
         }
         .sheet(isPresented: $showingCustomLocation) {
             NavigationStack {
@@ -83,5 +97,6 @@ private struct LocationRowView: View {
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 }
