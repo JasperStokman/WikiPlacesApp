@@ -3,13 +3,13 @@ import XCTest
 
 final class MockLocationsService: LocationService, @unchecked Sendable {
     let result: Result<[Location], Error>
-    let fetchExpectation = XCTestExpectation(description: "fetchLocations")
+    let fetchExpectation = XCTestExpectation(description: "getLocations")
 
     init(result: Result<[Location], Error>) {
         self.result = result
     }
 
-    func fetchLocations() async throws -> [Location] {
+    func getLocations() async throws -> [Location] {
         defer { fetchExpectation.fulfill() }
         return try result.get()
     }

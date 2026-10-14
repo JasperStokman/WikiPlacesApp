@@ -23,7 +23,7 @@ final class LocationsViewModelTests: XCTestCase {
     }
 
     func testLoadLocationsFailurePublishesError() async {
-        let service = MockLocationsService(result: .failure(LocationsServiceError.invalidResponse))
+        let service = MockLocationsService(result: .failure(NetworkError.invalidResponse))
         let router = MockWikipediaRouter()
         let viewModel = LocationsViewModel(locationsService: service, wikiRouting: router)
 

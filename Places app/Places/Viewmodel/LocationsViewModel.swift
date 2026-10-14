@@ -28,7 +28,7 @@ final class LocationsViewModel: ObservableObject {
     func loadLocations() {
         loadTask = Task {
             do {
-                let fetchedLocations = try await locationsService.fetchLocations()
+                let fetchedLocations = try await locationsService.getLocations()
                 
                 // Make sure only locations with name are visible
                 locations = fetchedLocations.filter { location in
