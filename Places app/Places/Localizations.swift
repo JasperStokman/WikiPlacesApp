@@ -19,3 +19,19 @@ extension Localized {
     static let decodingFailed = "Could not parse the locations list."
     static let rangeError = "Latitude must be between -90 and 90, longitude between -180 and 180."
 }
+
+// accessibility
+extension Localized {
+    static let accessibilityAddCustomLocation = "Add custom location"
+    static let accessibilityOpenInWikipediaHint = "Opens this location in the Wikipedia Places map."
+    static let accessibilityLoadingPlaces = "Loading places."
+    static let accessibilityPlacesLoadFailed = "Failed to load places."
+    static let accessibilityNameField = "Location name, optional"
+    static let accessibilityLatitudeField = "Latitude"
+    static let accessibilityLongitudeField = "Longitude"
+    static let accessibilityValidationError = "Validation error"
+
+    static func accessibilityLocationLabel(name: String, latitude: Double, longitude: Double) -> String {
+        "\(name), latitude \(latitude), longitude \(longitude)"
+    }
+}
