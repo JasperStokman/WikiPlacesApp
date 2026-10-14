@@ -16,11 +16,11 @@ final class LocationsViewModel: ObservableObject {
     @Published private(set) var onOpenError: String?
     
     private let locationsService: LocationService
-    private let wikiRouting: WikipediaURLOpener
+    private let wikiRouting: WikipediaOpening
     
     private var loadTask: Task<Void, Never>?
     
-    init(locationsService: LocationService, wikiRouting: WikipediaURLOpener) {
+    init(locationsService: LocationService, wikiRouting: WikipediaOpening) {
         self.locationsService = locationsService
         self.wikiRouting = wikiRouting
     }
